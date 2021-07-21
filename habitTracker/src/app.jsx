@@ -1,7 +1,8 @@
 
 import { computeHeadingLevel } from '@testing-library/react';
 import './app.css';
-import Habit from './components/habit';
+
+import Habits from './components/habits';
 
 function App() {
   const lists = [
@@ -18,7 +19,7 @@ function App() {
       
       </header>
       <div>
-        <Habit/>
+        <Habits/>
       </div>
     </div>
   );
