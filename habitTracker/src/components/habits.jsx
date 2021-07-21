@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Addform from './addform';
 import Habit from './habit';
 
 class Habits extends Component {
@@ -34,6 +35,7 @@ class Habits extends Component {
         const index = habits.indexOf(habit);
         habits[index].count++;
         this.setState({habits});
+        this.props.onIncrement(habits);
     }
     handelDecrement = (habit) => {
         console.log(`hableDecremet ${habit.name}`);
@@ -42,7 +44,8 @@ class Habits extends Component {
         const count = habits[index].count - 1;
         habits[index].count = count < 0 ? 0 : count ; // 이것도 안좋은 예제 입니다
         this.setState({habits})
-
+        this.props.onDecrement(habits);
+    
     }
     handleDelete = (habit) => {
         console.log(`hableDelete ${habit.name}`);
@@ -60,26 +63,43 @@ class Habits extends Component {
         // }
         // console.log(habits2);
         // this.setState({habits:habits2});
-
+    
         // 엘리 선생님방식 배열의 api인 filter를 사용 하여 걸러내기 쉽다
         const habits = this.state.habits.filter(item => item.id !== habit.id);
         this.setState({habits});
-
+        this.props.onDelete(habits);
+        
     }
-
+    hadelAdd = (habit) => {
+        console.log(`hadelAdd ${habit}`);
+        // this.setState({habit});
+        const count = new Date ;
+        const habits = this.state.habits.concat({id:count, name : habit,count:0});
+        this.setState({habits});
+        
+    }
+    handleReset = () => {
+        const habits = [...this.state.habits];
+        console.log(habits);
+        this.props.onReset();
+    }
 
     render() {
         return (
-            <ul>
-                {
-                    this.state.habits.map(habit => 
-                        <Habit habit={habit} 
-                            onIncrement = {this.handelIncrement}
-                            onDecrement = {this.handelDecrement}
-                            onDelete = {this.handleDelete}
-                        />
-                )}
-            </ul>
+            <div>
+                <Addform onAdd = {this.hadelAdd} />
+                <ul>
+                    {
+                        this.state.habits.map(habit => 
+                            <Habit habit={habit} 
+                                onIncrement = {this.handelIncrement}
+                                onDecrement = {this.handelDecrement}
+                                onDelete = {this.handleDelete}
+                            />
+                    )}
+                </ul>
+                <button onClick={this.handleReset}>Reset All</button>
+            </div>
         );
     }
 }
